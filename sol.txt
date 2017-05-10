@@ -1,0 +1,33 @@
+creating a hive table named country which is pointed to hbase table countryhbase.
+
+creating hbase table:
+
+create 'countryhbase','countrycode','country'
+-------------------------------------------------------------------------------------------
+creating hive table:
+
+create table country (countrycode string,countryname string,currencyunit string)
+
+ROW FORMAT SERDE
+  'org.apache.hadoop.hive.hbase.HBaseSerDe'
+STORED BY
+  'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES (
+  'hbase.columns.mapping'=':key,country:name,country:currency',
+  'serialization.format'='1')
+TBLPROPERTIES (
+  'hbase.table.name'='countryhbase'
+);
+
+
+before adding any records the below comand is used to reflect the content of hive into hbase
+
+set hbase.mapred.output.outputtable=contry;
+
+insert into table country values ("343","india","rupee");
+insert into table  country values ("343","indonesia","rupee");
+insert into table country values ("343","india","rupee");
+
+to see the contents fro hbase 
+
+scan 'countryhbase'
